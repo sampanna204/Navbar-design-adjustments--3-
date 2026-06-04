@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ShoppingCart, User, UserPlus, Search, Menu } from 'lucide-react';
 import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export function Navbar() {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,10 +18,14 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isHomeAndTop = location.pathname === '/' && !isScrolled;
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-[#FAF8F5] shadow-md border-b border-[rgba(74,66,56,0.1)]' : 'bg-transparent'
+        isHomeAndTop
+          ? 'bg-transparent'
+          : 'bg-[#FAF8F5] shadow-md border-b border-[rgba(74,66,56,0.1)]'
       }`}
     >
       <div className="container mx-auto px-6">
@@ -33,7 +38,7 @@ export function Navbar() {
               size="icon"
               aria-label="Toggle search"
               onClick={() => setShowSearch(!showSearch)}
-              className={isScrolled ? 'text-[#4A4238]' : 'text-white'}
+              className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -42,7 +47,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               aria-label="Cart"
-              className={isScrolled ? 'text-[#4A4238]' : 'text-white'}
+              className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
             >
               <ShoppingCart className="h-5 w-5" />
             </Button>
@@ -50,19 +55,17 @@ export function Navbar() {
             <div className="hidden lg:flex items-center gap-2">
               <Button
                 variant="ghost"
-                className={`text-sm md:text-base ${isScrolled ? 'text-[#4A4238]' : 'text-white'}`}
+                className={`text-sm md:text-base ${isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}`}
               >
                 <User className="h-4 w-4 mr-2" /> Login
               </Button>
               <Button
                 variant="ghost"
-                className={`text-sm md:text-base ${isScrolled ? 'text-[#4A4238]' : 'text-white'}`}
+                className={`text-sm md:text-base ${isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}`}
               >
                 <UserPlus className="h-4 w-4 mr-2" /> Sign Up
               </Button>
             </div>
-
-
           </div>
 
           {/* Center - Text Logo */}
@@ -70,7 +73,7 @@ export function Navbar() {
             <Link to="/" className="flex items-center justify-center">
               <span
                 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-widest uppercase transition-colors duration-300 ${
-                  isScrolled ? 'text-[#6D4C41]' : 'text-white'
+                  isHomeAndTop ? 'text-white' : 'text-[#6D4C41]'
                 }`}
               >
                 BECOONA
@@ -81,11 +84,36 @@ export function Navbar() {
           {/* Right side - Navigation Links */}
           <div className="flex items-center justify-end gap-6 font-medium text-sm md:text-base">
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/" className={isScrolled ? 'text-[#4A4238]' : 'text-white'}>Home</Link>
-              <Link to="/shop" className={isScrolled ? 'text-[#4A4238]' : 'text-white'}>Shop</Link>
-              <Link to="/about" className={isScrolled ? 'text-[#4A4238]' : 'text-white'}>About</Link>
-              <Link to="/blog" className={isScrolled ? 'text-[#4A4238]' : 'text-white'}>Blog</Link>
-              <a href="#contact" className={isScrolled ? 'text-[#4A4238]' : 'text-white'}>Contact</a>
+              <Link
+                to="/"
+                className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
+              >
+                Home
+              </Link>
+              <Link
+                to="/shop"
+                className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
+              >
+                Shop
+              </Link>
+              <Link
+                to="/about"
+                className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
+              >
+                About
+              </Link>
+              <Link
+                to="/blog"
+                className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
+              >
+                Blog
+              </Link>
+              <a
+                href="#contact"
+                className={isHomeAndTop ? 'text-white' : 'text-[#4A4238]'}
+              >
+                Contact
+              </a>
             </div>
 
             {/* Mobile - 3 dot / hamburger menu button (right side) */}
@@ -93,9 +121,9 @@ export function Navbar() {
               type="button"
               onClick={() => setMobileMenuOpen((v) => !v)}
               className={`md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border transition-colors ${
-                isScrolled
-                  ? 'bg-[#FAF8F5] border-[rgba(74,66,56,0.2)] text-[#4A4238]'
-                  : 'bg-transparent border-[rgba(255,255,255,0.25)] text-white'
+                isHomeAndTop
+                  ? 'bg-transparent border-[rgba(255,255,255,0.25)] text-white'
+                  : 'bg-[#FAF8F5] border-[rgba(74,66,56,0.2)] text-[#4A4238]'
               }`}
               aria-label="Open menu"
             >
@@ -108,22 +136,38 @@ export function Navbar() {
             <div className="md:hidden absolute left-6 right-6 top-20">
               <div
                 className={`rounded-xl border shadow-lg p-4 ${
-                  isScrolled
+                  isHomeAndTop
                     ? 'bg-[#FAF8F5] border-[rgba(74,66,56,0.15)]'
                     : 'bg-[#FAF8F5] border-[rgba(74,66,56,0.15)]'
                 }`}
               >
                 <div className="flex flex-col gap-3 font-medium text-[#4A4238]">
-                  <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:underline">
+                  <Link
+                    to="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline"
+                  >
                     Home
                   </Link>
-                  <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="hover:underline">
+                  <Link
+                    to="/shop"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline"
+                  >
                     Shop
                   </Link>
-                  <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="hover:underline">
+                  <Link
+                    to="/about"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline"
+                  >
                     About
                   </Link>
-                  <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="hover:underline">
+                  <Link
+                    to="/blog"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline"
+                  >
                     Blog
                   </Link>
                   <a
@@ -137,7 +181,6 @@ export function Navbar() {
               </div>
             </div>
           )}
-
         </div>
 
         {/* Search Bar */}
@@ -157,3 +200,4 @@ export function Navbar() {
     </nav>
   );
 }
+

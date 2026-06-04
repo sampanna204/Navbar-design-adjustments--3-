@@ -1,6 +1,7 @@
 # TODO
 
-- [x] Fix About photo not loading by using correct public asset URL
-- [x] Clean up About page layout JSX issues and indentation
-- [x] Move About section header/subtitle to the right side and ensure text is right-aligned
-- [ ] Improve spacing/typography to match expected “Our Story” centered on the right column and subtitle right-justified with good padding (pending visual verification)
+## Navbar visibility fix
+- [ ] Add `pt-20` (or matching to navbar height) to all pages that render under the fixed navbar (Shop, CategoryPage, Blog, Home)
+- [ ] Ensure no other page container uses `overflow-hidden` or negative margins that could hide the fixed navbar
+- [ ] Optionally add a responsive background + z-index safeguards
+
